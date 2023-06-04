@@ -11,14 +11,14 @@ import (
 	"path/filepath"
 )
 
-const version = "0.0.1"
+const version = "0.0.2"
 
 const appimagefile = "nvim.appimage"
 
 var revision = "HEAD"
 
 func download(url string, savePath string) error {
-	fmt.Printf("ファイルをダウンロードしています... %s\n", savePath)
+	fmt.Printf("Downloding files... %s\n", savePath)
 
 	err := os.MkdirAll(filepath.Dir(savePath), os.ModePerm)
 	if err != nil {
@@ -28,7 +28,7 @@ func download(url string, savePath string) error {
 	// ファイルを作成して保存するためのオープンファイル
 	file, err := os.Create(savePath)
 	if err != nil {
-		log.Fatalf("ファイルを作成できませんでした: %v", err)
+		return err
 	}
 	defer file.Close()
 
@@ -72,7 +72,6 @@ func main() {
 		log.Fatal(err)
 	}
 
-	// ダウンロードするファイルのURLと保存先のパス
 	url := "https://github.com/neovim/neovim/releases/download/" + tag + "/nvim.appimage"
 	savePath := filepath.Join(base, appimagefile)
 	err = download(url, savePath)
@@ -104,5 +103,5 @@ func main() {
 		log.Fatal(err)
 	}
 	fmt.Printf("\nManually add the directory to your shell profile\n")
-	fmt.Printf(`export PATH="%s:$PATH"`, path)
+	fmt.Println(fmt.Sprintf("export PATH=\"%s:$PATH\"", path))
 }
